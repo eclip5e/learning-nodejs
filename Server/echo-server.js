@@ -5,11 +5,12 @@ var url = require('url');
 
 new http.Server(function (request, response) {
 
-    console.log(request.headers);
-    console.log(' METHOD: %s\n URL: %s', request.method, request.url);
+    // console.log(request.headers);
+    // console.log(' METHOD: %s\n URL: %s', request.method, request.url);
 
     var urlParsed = url.parse(request.url, true);
-    console.log(urlParsed);
+    // debugger;
+    // console.log(urlParsed);
 
     if (urlParsed.pathname === '/echo' && urlParsed.query.message) {
         response.setHeader('Cache-control', 'no-cache');
@@ -20,3 +21,5 @@ new http.Server(function (request, response) {
     }
 
 }).listen(1337, '127.0.0.1');
+
+console.log('Server initialized!');
