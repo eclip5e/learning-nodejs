@@ -12,6 +12,7 @@ var log = require('libs/log')(module);
 var app = express();
 app.set('port', config.get('port'));
 
+app.engine('ejs', require('ejs-locals'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -29,7 +30,7 @@ app.use(app.router);
 
 app.get('/', function(req, res, next) {
     res.render('index', {
-        body: '<b>Hello!</b>'
+
     });
 });
 
