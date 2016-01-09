@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "express": "3.21.2",
-    "ejs": "*"
+    "ejs": "*",
+    "nconf": "0.8.2",
+    "winston": "2.1.1"
   }
 }
