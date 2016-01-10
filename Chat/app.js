@@ -5,6 +5,7 @@ var http = require('http');
 var path = require('path');
 var config = require('config');
 var log = require('libs/log')(module);
+var mongoose = require('libs/mongoose');
 var HttpError = require('error').HttpError;
 
 //var routes = require('./routes');
@@ -27,6 +28,28 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
+
+//app.use(express.bodyParser());
+
+app.use(express.cookieParser());
+
+var MongoStore = require('connect-mongo')(express);
+
+app.use(express.session({
+    secret: 'IKnowWhatYouDidThere',
+    key: 'sid',
+    cookie: {
+        path: '/',
+        httpOnly: true,
+        maxAge: null
+    },
+    store: new MongoStore({mongooseConnection: mongoose.connection})
+}));
+
+app.use(function (req, res, next) {
+    req.session.numberOfViews = req.session.numberOfViews + 1 || 1;
+    res.send('Visits: ' + req.session.numberOfViews);
+});
 
 app.use(require('middleware/sendHttpError'));
 
@@ -54,6 +77,3 @@ app.use(function (err, req, res, next) {
         }
     }
 });
-
-//app.get('/', routes.index);
-//app.get('/users', user.list);
