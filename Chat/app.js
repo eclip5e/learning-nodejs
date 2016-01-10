@@ -5,6 +5,7 @@ var http = require('http');
 var path = require('path');
 var config = require('config');
 var log = require('libs/log')(module);
+var HttpError = require('error').HttpError;
 
 //var routes = require('./routes');
 //var user = require('./routes/user');
@@ -26,22 +27,31 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
+
+app.use(require('middleware/sendHttpError'));
+
 app.use(app.router);
 
-app.get('/', function(req, res, next) {
-    res.render('index', {
-
-    });
-});
+require('routes')(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (err, req, res, next) {
-    if (app.get('env') === 'development') {
-        var errorHandler = express.errorHandler();
-        errorHandler(err, req, res, next);
+    if (typeof err === 'number') {
+        err = new HttpError(err);
+    }
+
+    if (err instanceof HttpError) {
+        res.sendHttpError(err);
     } else {
-        res.send(500);
+        if (app.get('env') === 'development') {
+            var errorHandler = express.errorHandler();
+            errorHandler(err, req, res, next);
+        } else {
+            log.error(err);
+            err = new HttpError(500);
+            res.sendHttpError(err);
+        }
     }
 });
 
