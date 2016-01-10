@@ -9,6 +9,7 @@
     "ejs": "*",
     "ejs-locals": "^1.0.2",
     "express": "3.21.2",
+    "mongoose": "^4.3.5",
     "nconf": "0.8.2",
     "winston": "2.1.1"
   }
