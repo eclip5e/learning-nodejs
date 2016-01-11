@@ -46,12 +46,9 @@ app.use(express.session({
     store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
 
-app.use(function (req, res, next) {
-    req.session.numberOfViews = req.session.numberOfViews + 1 || 1;
-    res.send('Visits: ' + req.session.numberOfViews);
-});
-
 app.use(require('middleware/sendHttpError'));
+
+app.use(require('middleware/loadUser'));
 
 app.use(app.router);
 

@@ -4,12 +4,23 @@
         <li>
             <a href="/">Main</a>
         </li>
+        <% if (user) { %>
+        <li>
+            <a href="/chat">Chat</a>
+        </li>
+        <% } %>
     </ul>
 
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav">
+        <% if (user) { %>
+        <li>
+            <a href="" onclick="$('<form method=POST action=/logout>').submit(); return false;">Logout</a>
+        </li>
+        <% } else { %>
         <li>
             <a href="/login">Log In</a>
         </li>
+        <% } %>
     </ul>
 
 </nav>
