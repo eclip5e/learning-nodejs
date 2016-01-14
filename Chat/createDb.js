@@ -6,7 +6,6 @@ var async = require('async');
 async.series([
     open, dropDatabase, requireModels, createUsers
 ], function (err, results) {
-    console.log(arguments);
     mongoose.disconnect();
 });
 

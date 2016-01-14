@@ -2,8 +2,6 @@
 
 module.exports = function (req, res, next) {
 
-    console.log(res);
-
     res.sendHttpError = function (error) {
 
         res.statusCode = error.status;

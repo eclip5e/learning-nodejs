@@ -18,7 +18,8 @@ app.engine('ejs', require('ejs-locals'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app);
+server.listen(app.get('port'), function(){
     log.info('Express server listening on port ' + config.get('port'));
 });
 
@@ -73,4 +74,15 @@ app.use(function (err, req, res, next) {
             res.sendHttpError(err);
         }
     }
+});
+
+var io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+
+    socket.on('message', function (text, cb) {
+        socket.broadcast.emit('message', text);
+        cb('123');
+    });
+
 });
