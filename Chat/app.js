@@ -76,13 +76,4 @@ app.use(function (err, req, res, next) {
     }
 });
 
-var io = require('socket.io')(server);
-
-io.on('connection', function (socket) {
-
-    socket.on('message', function (text, cb) {
-        socket.broadcast.emit('message', text);
-        cb('123');
-    });
-
-});
+require('./socket')(server);
