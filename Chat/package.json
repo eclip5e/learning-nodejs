@@ -8,6 +8,8 @@
   "dependencies": {
     "async": "^1.5.2",
     "connect-mongo": "^1.1.0",
+    "cookie": "^0.2.3",
+    "cookie-parser": "^1.4.1",
     "ejs": "*",
     "ejs-locals": "^1.0.2",
     "express": "3.21.2",

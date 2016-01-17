@@ -43,13 +43,21 @@
 
         socket.emit('message', text, function (data) {
             console.log(data);
-            $('<li>', {text: text}).appendTo(ul);
+            $('<li><span>Me</span>:' + '<span>' + text + '</span></li>').appendTo(ul);
         });
 
         return false;
     });
 
-    socket.on('message', function (text) {
-        $('<li>', {text: text}).appendTo(ul);
+    socket.on('message', function (username, text) {
+        $('<li><span>' + username + '</span>:' + '<span>' + text + '</span></li>').appendTo(ul);
+    });
+
+    socket.on('leave', function (username) {
+        $('<span>User ' + username + ' has left the chat.</span>').appendTo(ul);
+    });
+
+    socket.on('join', function (username) {
+        $('<span>User ' + username + ' has joined the chat.</span>').appendTo(ul);
     });
 </script>

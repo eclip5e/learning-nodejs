@@ -9,5 +9,8 @@
         }
       }
     }
+  },
+  "session": {
+    "secret": "IKnowWhatYouDidThere"
   }
 }

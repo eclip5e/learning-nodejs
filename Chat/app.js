@@ -34,17 +34,17 @@ app.use(express.urlencoded());
 
 app.use(express.cookieParser());
 
-var MongoStore = require('connect-mongo')(express);
+var sessionStore = require('libs/sessionStore');
 
 app.use(express.session({
-    secret: 'IKnowWhatYouDidThere',
+    secret: config.get('session:secret'),
     key: 'sid',
     cookie: {
         path: '/',
         httpOnly: true,
         maxAge: null
     },
-    store: new MongoStore({mongooseConnection: mongoose.connection})
+    store: sessionStore
 }));
 
 app.use(require('middleware/sendHttpError'));
@@ -76,4 +76,5 @@ app.use(function (err, req, res, next) {
     }
 });
 
-require('./socket')(server);
+var io = require('./socket')(server);
+app.set('io', io);
