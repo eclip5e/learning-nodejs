@@ -42,6 +42,8 @@ function loadUser(session, callback) {
 
 module.exports = function (server) {
 
+    console.log('-> INITIALIZING CHAT MODULE');
+
     var io = require('socket.io')(server);
     io.origins('127.0.0.1:*');
 
@@ -53,7 +55,10 @@ module.exports = function (server) {
         async.waterfall([
             function (callback) {
 
+                console.log('-> WORKING WITH HANDSHAKE', handshakeData.headers.cookie);
+
                 handshakeData.cookies = cookie.parse(handshakeData.headers.cookie || '');
+                console.log('-> GOT COOKIE:', handshakeData.cookies);
                 var sidCookie = handshakeData.cookies.sid;
                 var sid = cookieParser.signedCookie(sidCookie, config.get('session:secret'));
                 console.log('-> SESSION ID', sid);
@@ -93,10 +98,6 @@ module.exports = function (server) {
         });
 
     });
-
-    //io.on('session:reload', function (sid) {
-    //    console.log('-> CAUGHT SESSION:RELOAD EVENT.', sid);
-    //});
 
     io.on('connection', function (socket) {
 

@@ -25,18 +25,22 @@ server.listen(app.get('port'), function(){
 
 // Middleware
 
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
+var favicon = require('serve-favicon');
+app.use(favicon(__dirname + '/public/favicon.ico'));
 
+// app.use(express.logger('dev'));
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 //app.use(express.bodyParser());
 
-app.use(express.cookieParser());
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
-var sessionStore = require('libs/sessionStore');
-
-app.use(express.session({
+var sessionStore = require('./libs/sessionStore');
+var expressSession = require('express-session');
+app.use(expressSession({
     secret: config.get('session:secret'),
     key: 'sid',
     cookie: {
@@ -51,7 +55,13 @@ app.use(require('middleware/sendHttpError'));
 
 app.use(require('middleware/loadUser'));
 
-app.use(app.router);
+// app.use(app.router);
+var checkAuth = require('middleware/CheckAuth');
+app.get('/', require('./routes/frontpage').get);
+app.get('/login', require('./routes/login').get);
+app.post('/login', require('./routes/login').post);
+app.post('/logout', require('./routes/logout').post);
+app.get('/chat', checkAuth, require('./routes/chat').get);
 
 require('routes')(app);
 
